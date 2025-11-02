@@ -1,10 +1,24 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
-const VideoPlayer = ({ src, title }) => {
+const VideoPlayer = ({ src, title, seekTo }) => {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (ref.current && typeof seekTo === 'number') {
+      try {
+        ref.current.currentTime = seekTo;
+        ref.current.focus();
+      } catch (e) {
+        // ignore
+      }
+    }
+  }, [seekTo]);
+
   return (
     <div className="w-full">
       <div className="aspect-video w-full overflow-hidden rounded-xl bg-black">
         <video
+          ref={ref}
           controls
           controlsList="nodownload"
           className="h-full w-full"

@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ArrowLeft, Eye } from 'lucide-react';
 import VideoPlayer from './VideoPlayer';
 import Notes from './Notes';
 import RelatedList from './RelatedList';
+import Timestamps from './Timestamps';
+import Resources from './Resources';
 
 const ModuleDetail = ({ module, related, onBack, onSelectRelated }) => {
   if (!module) return null;
+  const [seekTo, setSeekTo] = useState(null);
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
@@ -15,7 +18,7 @@ const ModuleDetail = ({ module, related, onBack, onSelectRelated }) => {
 
       <div className="grid lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
-          <VideoPlayer src={module.videoUrl} title={module.title} />
+          <VideoPlayer src={module.videoUrl} title={module.title} seekTo={seekTo} />
           <div className="mt-4">
             <div className="flex items-center gap-2 text-sm text-gray-600">
               <span>{module.educator}</span>
@@ -27,7 +30,9 @@ const ModuleDetail = ({ module, related, onBack, onSelectRelated }) => {
             <p className="mt-3 text-gray-700 leading-relaxed">{module.description}</p>
           </div>
 
-          <div className="mt-6">
+          <div className="mt-6 grid gap-6">
+            <Timestamps moduleId={module.id} onSeek={(t) => setSeekTo(t)} />
+            <Resources moduleId={module.id} />
             <Notes moduleId={module.id} />
           </div>
         </div>
